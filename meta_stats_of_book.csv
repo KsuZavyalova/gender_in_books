@@ -1,0 +1,107 @@
+book_name,text_length,year,century,author,author_gender,genre,total_names,female_names_count,male_names_count,gender_ratio,names_density_per_100k
+Robinson_Crusoe,631685,1719.0,18.0,Defoe_Daniel,male,adventure,48,13,35,0.371428571428571,7.6
+Gullivers_Travels,581556,1726.0,18.0,Swift_Jonathan,male,satire,110,20,90,0.222222222222222,18.91
+Tom_Jones,1960956,1749.0,18.0,Fielding_Henry,male,satire,368,122,246,0.495934959349594,18.77
+Tristram_Shandy,1057936,1759.0,18.0,Sterne_Laurence,male,psychological,806,214,592,0.361486486486487,76.19
+Evelina,887681,1778.0,18.0,Burney_Fanny,female,satire,147,71,76,0.93421052631579,16.56
+Mary_A_Fiction,148866,1788.0,18.0,Wollstonecraft_Mary,female,psychological,17,8,9,0.888888888888889,11.42
+Charlotte_Temple,214172,1791.0,18.0,Rowson_Susanna,female,romance,55,30,25,1.2,25.68
+The_Mysteries_of_Udolpho,1710352,1794.0,18.0,Radcliffe_Ann,female,gothic,222,98,124,0.790322580645161,12.98
+The_Monk,122294,1796.0,18.0,Lewis_Matthew,male,gothic,72,29,43,0.674418604651163,58.87
+Sense_and_Sensibility,683346,1811.0,19.0,Austen_Jane,female,romance,91,41,50,0.82,13.32
+Pride_and_Prejudice,727362,1813.0,19.0,Austen_Jane,female,romance,105,52,53,0.981132075471698,14.44
+Emma,880423,1815.0,19.0,Austen_Jane,female,romance,136,59,77,0.766233766233766,15.45
+Northanger_Abbey,441994,1817.0,19.0,Austen_Jane,female,romance,88,41,47,0.872340425531915,19.91
+Frankenstein,419336,1818.0,19.0,Shelley_Mary,female,gothic,85,25,60,0.416666666666667,20.27
+Persuasion,473116,1818.0,19.0,Austen_Jane,female,romance,108,44,64,0.6875,22.83
+The_Last_Man,765806,1826.0,19.0,Shelley_Mary,female,scifi,161,66,95,0.694736842105263,21.02
+Oliver_Twist,893020,1838.0,19.0,Dickens_Charles,male,social,126,35,91,0.384615384615385,14.11
+Agnes_Grey,156880,1847.0,19.0,Bronte_Anne,female,realism,79,15,64,0.234375,50.36
+Jane_Eyre,1022061,1847.0,19.0,Bronte_Charlotte,female,gothic,243,121,122,0.991803278688525,23.78
+Wuthering_Heights,645605,1847.0,19.0,Bronte_Emily,female,gothic,102,44,58,0.758620689655172,15.8
+Mary_Barton,321097,1848.0,19.0,Gaskell_Elizabeth,female,social,230,62,168,0.369047619047619,71.63
+The_Tenant_of_Wildfell_Hall,953587,1848.0,19.0,Bronte_Anne,female,realism,136,53,83,0.63855421686747,14.26
+Vanity_Fair,1745856,1848.0,19.0,Thackeray_William,male,satire,804,277,527,0.52561669829222,46.05
+David_Copperfield,1972851,1849.0,19.0,Dickens_Charles,male,realism,285,105,180,0.583333333333333,14.45
+The_Scarlet_Letter,488436,1850.0,19.0,Hawthorne_Nathaniel,male,historical,87,29,58,0.5,17.81
+House_of_Seven_Gables,621614,1851.0,19.0,Hawthorne_Nathaniel,male,gothic,119,35,84,0.416666666666667,19.14
+Moby_Dick,1237092,1851.0,19.0,Melville_Herman,male,adventure,452,93,359,0.259052924791086,36.54
+Bartleby_the_Scrivener,83398,1853.0,19.0,Melville_Herman,male,psychological,18,3,15,0.2,21.58
+Bleak_House,1978971,1853.0,19.0,Dickens_Charles,male,social,278,93,185,0.502702702702703,14.05
+Cranford,706835,1853.0,19.0,Gaskell_Elizabeth,female,satire,506,161,345,0.466666666666667,71.59
+Villette,251841,1853.0,19.0,Bronte_Charlotte,female,psychological,164,64,100,0.64,65.12
+North_and_South,1010344,1855.0,19.0,Gaskell_Elizabeth,female,social,203,78,125,0.624,20.09
+Adam_Bede,80728,1859.0,19.0,Eliot_George,female,realism,123,42,81,0.518518518518519,152.36
+The_Mill_on_the_Floss,540977,1860.0,19.0,Eliot_George,female,realism,118,63,55,1.14545454545455,21.81
+Great_Expectations,1015012,1861.0,19.0,Dickens_Charles,male,realism,173,53,120,0.441666666666667,17.04
+Silas_Marner,392469,1861.0,19.0,Eliot_George,female,realism,98,30,68,0.441176470588235,24.97
+Little_Women,1027439,1868.0,19.0,Alcott_Louisa,female,children,342,148,194,0.762886597938144,33.29
+Little_Men,371682,1871.0,19.0,Alcott_Louisa,female,children,103,40,63,0.634920634920635,27.71
+Middlemarch,1780107,1871.0,19.0,Eliot_George,female,realism,504,153,351,0.435897435897436,28.31
+Far_from_the_Madding_Crowd,790196,1874.0,19.0,Hardy_Thomas,male,realism,221,78,143,0.545454545454545,27.97
+Tom_Sawyer,392732,1876.0,19.0,Twain_Mark,male,adventure,105,23,82,0.280487804878049,26.74
+Daisy_Miller,124937,1878.0,19.0,James_Henry,male,psychological,28,8,20,0.4,22.41
+Portrait_of_a_Lady,873507,1881.0,19.0,James_Henry,male,psychological,1604,460,1144,0.402097902097902,183.63
+Prince_and_the_Pauper,404181,1881.0,19.0,Twain_Mark,male,historical,150,31,119,0.260504201680672,37.11
+A_Country_Doctor,40846,1884.0,19.0,Jewett_Sarah,female,realism,12,2,10,0.2,29.38
+Huckleberry_Finn,571052,1884.0,19.0,Twain_Mark,male,adventure,239,60,179,0.335195530726257,41.85
+Picture_of_Dorian_Gray,437768,1890.0,19.0,Wilde_Oscar,male,gothic,241,71,170,0.417647058823529,55.05
+Tess_of_the_dUrbervilles,858308,1891.0,19.0,Hardy_Thomas,male,realism,210,74,136,0.544117647058824,24.47
+Adventures_of_Sherlock_Holmes,574008,1892.0,19.0,Doyle_Arthur,male,mystery_thriller,174,53,121,0.43801652892562,30.31
+The_Yellow_Wallpaper,320731,1892.0,19.0,Gilman_Charlotte,female,psychological,142,44,98,0.448979591836735,44.27
+The_Story_of_an_Hour,433704,1894.0,19.0,Chopin_Kate,female,short_story,567,162,405,0.4,130.73
+Importance_of_Being_Earnest,117286,1895.0,19.0,Wilde_Oscar,male,satire,71,23,48,0.479166666666667,60.54
+Jude_the_Obscure,654466,1895.0,19.0,Hardy_Thomas,male,tragedy,285,55,230,0.239130434782609,43.55
+The_Time_Machine,182863,1895.0,19.0,Wells_HG,male,scifi,11,6,5,1.2,6.02
+The_Country_of_the_Pointed_Firs,232631,1896.0,19.0,Jewett_Sarah,female,realism,89,32,57,0.56140350877193,38.26
+Dracula,861148,1897.0,19.0,Stoker_Bram,male,gothic,184,64,120,0.533333333333333,21.37
+The_Invisible_Man,278571,1897.0,19.0,Wells_HG,male,scifi,56,12,44,0.272727272727273,20.1
+War_of_the_Worlds,337423,1897.0,19.0,Wells_HG,male,scifi,39,11,28,0.392857142857143,11.56
+Turn_of_the_Screw,233010,1898.0,19.0,James_Henry,male,gothic,27,10,17,0.588235294117647,11.59
+Heart_of_Darkness,213241,1899.0,19.0,Conrad_Joseph,male,psychological,17,3,14,0.214285714285714,7.97
+The_Awakening,366687,1899.0,19.0,Chopin_Kate,female,psychological,148,72,76,0.947368421052632,40.36
+Lord_Jim,772351,1900.0,19.0,Conrad_Joseph,male,adventure,273,74,199,0.371859296482412,35.35
+Hound_of_the_Baskervilles,361469,1902.0,20.0,Doyle_Arthur,male,mystery_thriller,59,7,52,0.134615384615385,16.32
+A_Little_Princess,423559,1905.0,20.0,Burnett_Frances,female,children,654,170,484,0.351239669421488,154.41
+The_House_of_Mirth,153601,1905.0,20.0,Wharton_Edith,female,social,203,45,158,0.284810126582279,132.16
+The_Secret_Agent,531216,1907.0,20.0,Conrad_Joseph,male,social,60,14,46,0.304347826086957,11.29
+Anne_of_Green_Gables,560781,1908.0,20.0,Montgomery_LM,female,coming_of_age,239,123,116,1.06034482758621,42.62
+Ethan_Frome,162892,1911.0,20.0,Wharton_Edith,female,tragedy,111,46,65,0.707692307692308,68.14
+Herland,296694,1915.0,20.0,Gilman_Charlotte,female,utopia,58,25,33,0.757575757575758,19.55
+The_Age_of_Innocence,578392,1920.0,20.0,Wharton_Edith,female,social,199,93,106,0.877358490566038,34.41
+This_Side_of_Paradise,484612,1920.0,20.0,Fitzgerald_FScott,male,modernist,345,125,220,0.568181818181818,71.19
+The_Beautiful_and_Damned,721459,1922.0,20.0,Fitzgerald_FScott,male,modernist,273,98,175,0.56,37.84
+Emily_of_New_Moon,717107,1923.0,20.0,Montgomery_LM,female,coming_of_age,1968,319,1649,0.193450576106731,274.44
+A_Feast_for_Crows,1713576,2005.0,21.0,George R. R. Martin,male,scifi,1740,581,1159,0.501294219154444,101.54
+A_Street_Cat_Named_Bob,338873,2010.0,21.0,James Bowen,male,nonfiction,67,20,47,0.425531914893617,19.77
+A_Warrior_s_Journey,687792,2003.0,21.0,Paul B. Thompson,male,fantasy,258,87,171,0.508771929824561,37.51
+BRIDE,598254,2024.0,21.0,"Ali Hazelwood, Ali Hazelwood",female,romance,140,76,64,1.1875,23.4
+CHAPTER_ONE,918285,1992.0,20.0,"harry, harry",male,contemporary,183,77,106,0.726415094339623,19.93
+CRESCENT_CITY_HOUSE_OF_FLAME_AND_SHADOW,1409127,2024.0,21.0,"Sarah J. Maas, Sarah J. Maas",female,fantasy,376,186,190,0.978947368421053,26.68
+City_of_Glass,839589,2009.0,21.0,Cassandra Clare,female,fantasy,218,80,138,0.579710144927536,25.97
+Fourth_Wing,1021396,2023.0,21.0,"Rebecca Yarros, Rebecca Yarros",female,fantasy,280,135,145,0.931034482758621,27.41
+Gideon_the_Ninth,810634,2019.0,21.0,"Tamsyn Muir, Stas Bushuev",female,scifi,170,83,87,0.954022988505747,20.97
+Girl_Online,439846,2014.0,21.0,"Sugg Zoe, Джим",female,contemporary,145,73,72,1.01388888888889,32.97
+Harry_Potter_and_the_Sorcerer_s_Stone,437300,1997.0,20.0,"J. K. Rowling, olimo",female,children,230,66,164,0.402439024390244,52.6
+Ice_Station_Zebra,528204,1963.0,20.0,Alistair MacLean,male,mystery_thriller,95,20,75,0.266666666666667,17.99
+It_ends_with_us,547965,2016.0,21.0,"Colleen Hoover, Colleen Hoover",female,romance,85,43,42,1.02380952380952,15.51
+Juniper_Thorn,594759,2022.0,21.0,"Ava Reid, Ava Reid",female,fantasy,86,27,59,0.457627118644068,14.46
+Mortal_Engines,435175,2001.0,21.0,Phillip Reeve,male,fantasy,146,77,69,1.11594202898551,33.55
+Realms_of_the_Dragons_vol_1,581131,2004.0,21.0,Phillip,male,fantasy,270,106,164,0.646341463414634,46.46
+Roots_of_Chaos_3_Among_the_Burning_Flowers,373894,2025.0,21.0,"Samantha Shannon, Samantha Shannon",female,fantasy,367,194,173,1.12138728323699,98.16
+Royal_Fashion_2_All_the_Gossip_From_Paris,460052,2025.0,21.0,"Jessica Gregory, Jessica Gregory",female,nonfiction,101,48,53,0.905660377358491,21.95
+Sands_of_the_Soul,483732,2002.0,21.0,Voronica Whitney-Robinson,female,fantasy,82,37,45,0.822222222222222,16.95
+Tamora_Pierce_The_Will_of_the,738854,2005.0,21.0,"harry kruiswijk, harry kruiswijk",female,fantasy,213,101,112,0.901785714285714,28.83
+The_Hobbit,507429,1937.0,20.0,"John R. R. Tolkien, Сергей Соколов",male,fantasy,90,18,72,0.25,17.74
+The_Mage_In_The_Iron_Mask,436136,1996.0,20.0,Brian M. Thomsen,male,fantasy,127,39,88,0.443181818181818,29.12
+The_Magician_s_Nephew,220441,1955.0,20.0,Clive Staples Lewis,male,children,54,24,30,0.8,24.5
+The_Quiet_Mother,472055,2025.0,21.0,Arnaldur Indridason,male,mystery_thriller,102,41,61,0.672131147540984,21.61
+The_Serpent_Sea,687955,2012.0,21.0,Martha Wells,female,fantasy,103,54,49,1.10204081632653,14.97
+The_Thief_Taker_s_Blade,84255,2015.0,21.0,"Stephen Deas, Stephen Deas",male,fantasy,41,13,28,0.464285714285714,48.66
+The_Will_of_the_Many,1365151,2023.0,21.0,"James Islington, James Islington",male,fantasy,368,135,233,0.579399141630901,26.96
+Throne_of_Glass,650417,2012.0,21.0,Sarah J. Maas,female,fantasy,161,90,71,1.26760563380282,24.75
+Twilight,657972,2005.0,21.0,"Stephenie Meyer, Your Name",female,mystery_thriller,111,50,61,0.819672131147541,16.87
+Veronika_decides_to_die,289512,1998.0,20.0,"Paulo Coelho, Paulo Coelho",male,contemporary,52,24,28,0.857142857142857,17.96
+Warlock_s_Last_Ride,553058,2004.0,21.0,Christopher Stasheff,male,fantasy,175,65,110,0.590909090909091,31.64
+Whimbrel_House_1_Keeper_of_Enchanted_Rooms,553034,2022.0,21.0,"Holmberg, Charlie N., Holmberg, Charlie N.",female,fantasy,121,59,62,0.951612903225807,21.88
+Zodiac_Academy_4_Shadow_Princess_An_Academy_Bully_Romance_Supernatural_Bullies_and_Beasts,1179606,2020.0,21.0,"Caroline Peckham, Susanne Valenti, Caroline Peckham, Susanne Valenti",female,fantasy,206,108,98,1.10204081632653,17.46
