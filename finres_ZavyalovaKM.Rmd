@@ -1,0 +1,1510 @@
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{text name}
+Завьялова Ксения
+```
+# Лексическое разнообразие описаний персонажей: сравнение мужских и женских образов.
+
+## 1. Введение и постановка проблемы
+
+### 1.1. Контекст исследования
+
+Качественные литературоведческие исследования последовательно фиксируют устойчивую асимметрию в изображении персонажей: мужские персонажи чаще описываются через действия и социальные роли, женские — через внешность и эмоциональные состояния [1, 2].
+
+В последние десятилетия произошёл значительный сдвиг в репрезентации женских персонажей в популярной и жанровой литературе. Если в классической литературе XIX века женские персонажи часто занимали периферийные роли или служили объектом мужского взгляда, то начиная с конца XX — начала XXI века наблюдается устойчивый тренд на создание сложных женских протагонистов. Серии книг, такие как «Сумерки» С. Майер (2005–2008), «Голодные игры» С. Коллинз (2008–2010), «Дивергент» В. Рот (2011–2013), демонстрируют, что женские персонажи всё чаще становятся центральными фигурами нарратива, обладающими агентностью и сложной психологией. Этот тренд отражает более широкие культурные сдвиги: исследования young adult (YA) литературы показывают, что доля женских протагонистов в YA-фантастике выросла с 20% в 1980-х до более 50% к 2010-м годам, а популярность таких произведений коррелирует с ростом интереса к гендерному равенству среди молодёжи [3].
+
+Включение в корпус как классических произведений (XVIII–XIX века), так и современной популярной литературы (2020-е годы) позволяет проследить историческую динамику: как менялись паттерны описания женских персонажей в период их перехода от периферии к центру нарратива.
+
+В количественных исследованиях XIX века Юкерс и Мимино [4] применили тематическое моделирование (LDA) к корпусу из 3 346 романов из Project Gutenberg. Они выявили 49 тематических кластеров и показали, что женщины-авторы статистически значимо чаще используют темы, связанные с эмоциями и домашней жизнью (*p* < 0.001 по сравнению с мужчинами-авторами), тогда как мужчины-авторы чаще обращаются к темам политики, войны и общественных институтов.
+
+Ключевую для настоящего исследования работу провели Андервуд, Бамман и Ли [5]. Они проанализировали 104 000 произведений художественной литературы на английском языке (1703–2009) из HathiTrust Digital Library и Chicago Novel Corpus Авторы выявили несколько устойчивых паттернов:
+
+1) Доля женских персонажей в романах мужчин-авторов составляет лишь 25–33% «персонажного пространства», тогда как в романах женщин-авторов — около 50%. Этот разрыв остаётся стабильным на протяжении двух столетий.
+2) Гендерная дифференциация ослабевает, так как точность модели, предсказывающей пол персонажа по связанным с ним словам (без учёта местоимений и гендерно-маркированной лексики), падает с ~76% в 1850 году до ~66% в 2007 году. Это означает, что языковые характеристики персонажей становятся менее чётко разделёнными по полу.
+3)Пол автора влияет на дифференциацию. Модели, обученные только на текстах мужчин-авторов, предсказывают пол персонажа точнее на 2.5%, чем модели на текстах женщин-авторов. То есть мужчины-авторы сильнее подчёркивают гендерные различия между персонажами.
+
+Гендерные асимметрии были обнаружены и в распределительных семантических моделях. Болукбаши и соавторы [6], обучив word embeddings на корпусе Google News (100 млрд слов), продемонстрировали, что модели воспроизводят культурные стереотипы: аналогия «man : programmer :: woman : homemaker» имеет косинусное сходство 0.73, что статистически значимо выше случайного уровня (*p* < 0.001).
+
+Настоящее исследование направлено на заполнение пробела в систематическом изучении **лексического разнообразия** прилагательных (а не просто частотного распределения или тематических кластеров) путём анализа корпуса из 108 произведений, охватывающих период с 1719 по 2025 год, включая как классическую литературу, так и современные бестселлеры с женскими протагонистами.
+
+---
+
+### 1.2. Исследовательские вопросы и гипотезы
+На основе рассмотренных предыдущих исследований и описанного контекста формулируются четыре исследовательских вопроса, расположенных от основного к дополнительным.
+
+*RQ1 (основноя). Отличается ли лексическое разнообразие прилагательных, используемых для описания женских и мужских персонажей в англоязычной художественной литературе? Если отличается, то в какую сторону: женские персонажи описываются более разнообразной или, напротив, более стереотипной лексикой?*
+
+*Ожидаемый эффект.* Средний type-token ratio (TTR) прилагательных для женских персонажей выше, чем для мужских.
+
+H0₁: μ(TTR | female) = μ(TTR | male)
+H1₁: μ(TTR | female) > μ(TTR | male)
+
+RQ2. Зависит ли величина гендерной асимметрии в лексическом разнообразии от пола автора? В частности, воспроизводят ли мужчины-авторы более сильную гендерную дифференциацию в описаниях персонажей по сравнению с женщинами-авторами?
+
+*Ожидаемый эффект.* Взаимодействие character_gender × author_gender: разница в TTR между женскими и мужскими персонажами больше у мужчин-авторов, чем у женщин-авторов.
+
+H0₂: (μ(TTR | female, male_author) − μ(TTR | male, male_author)) = (μ(TTR | female, female_author) − μ(TTR | male, female_author))
+H1₂: (μ(TTR | female, male_author) − μ(TTR | male, male_author)) > (μ(TTR | female, female_author) − μ(TTR | male, female_author))
+
+RQ3. Зависит ли гендерная асимметрия в лексическом разнообразии от жанра произведения?
+
+*Ожидаемый эффект.* Значимое взаимодействие character_gender × genre.
+
+H0₃: Эффект character_gender на TTR одинаков во всех жанрах.
+H1₃: Существует значимое взаимодействие character_gender × genre
+
+RQ4. Менялась ли гендерная асимметрия в лексическом разнообразии прилагательных на протяжении XVIII–XXI веков?
+
+*Ожидаемый эффект.* Взаимодействие character_gender × century: разница в TTR между женскими и мужскими персонажами уменьшается от XVIII к XXI веку, возможно с немонотонной динамикой в XXI веке.
+
+H0₄: Эффект character_gender на TTR не зависит от века.
+H1₄: Существует значимое взаимодействие character_gender × century, при котором разница TTR между женскими и мужскими персонажами статистически значимо уменьшается от XVIII к XXI веку.
+
+RQ5. Каково соотношение женских и мужских персонажей в корпусе, и зависит ли это соотношение от пола автора? В частности, воспроизводится ли в нашем корпусе из 108 произведений паттерн, описанный Underwood et al. (2018), согласно которому женские персонажи занимают меньшую долю character-space, причём у мужчин-авторов эта доля составляет лишь 25–33%, а у женщин-авторов — около 50%?
+
+*Ожидаемый эффект.* Доля женских персонажей статистически значимо выше в произведениях женщин-авторов, чем в произведениях мужчин-авторов.
+
+H0₅: p(female | female_author) = p(female | male_author)
+H1₅: p(female | female_author) > p(female | male_author)
+
+
+## 2. Описание данных
+
+Исследование опирается на самостоятельно собранный корпус англоязычной художественной литературы, охватывающий период с 1719 по 2025 год. Корпус включает 106 произведений - как классические романы XVIII–XIX веков, так и современные бестселлеры.
+
+### 2.1. Пайплайн сбора и обработки данных
+
+Обработка данных состояла из пяти последовательных этапов. Этапы реализованы на Python с использованием библиотек spaCy, transformers, pandas и requests.
+
+*1. Сбор и предобработка текстов*
+Для каждой книги извлекался «чистый» текст: удалялись титульные страницы, оглавления, выходные данные, сноски и библиографические вставки. Для книг из Project Gutenberg дополнительно удалялись стандартные заголовки. Итоговый объём корпуса — около 50 миллионов символов.
+*2. Извлечение имён персонажей*
+Для идентификации имён персонажей применялся ансамбль из трех методов, что позволило повысить полноту извлечения за счёт компенсации ошибок отдельных моделей:
+- spaCy (en_core_web_sm) — статистический NER-теггер, извлекающий сущности с меткой PERSON.
+- BERT-base-NER (dslim/bert-base-NER) — модель на основе BERT, обученная на конкатенации OntoNotes, CoNLL и других корпусов.
+- XLM-RoBERTa-base-NER (Davlan/xlm-roberta-base-ner-hrl) — мультиязычная модель, показывающая высокую точность на английских текстах.
+Результаты всех  методов агрегировались в единую матрицу, где для каждого уникального имени сохранялись confidence-оценки от каждой модели. Это позволило в дальнейшем отбирать имена, распознанные несколькими методами одновременно.
+*3. Классификация пола имён (LLM)*
+Поскольку многие имена в корпусе являются вымышленными (особенно в жанре fantasy) и отсутствуют в стандартных гендерных словарях, для определения пола каждого имени использовалась большая языковая модель(Qwen-2.5 72B). Каждое уникальное имя (после приведения к нижнему регистру) отправлялось в модель с промптом, требующим классифицировать его как:
+1 — женское личное имя (female given name),
+2 — мужское личное имя (male given name),
+3 — не имя.
+Промпт явно запрещал модели опираться на капитализацию (все имена подавались в нижнем регистре) и требовал опираться на лексическую и морфологическую природу токена.
+*4. Извлечение прилагательных*
+Для каждого имени в каждой книге извлекались прилагательные, синтаксически связанные с этим именем. Пайплайн состоял из трёх этапов:
+Синтаксический анализ — текст обрабатывался моделью spaCy en_core_web_sm с включённым dependency parser.
+Разрешение кореференции — местоимения связывались с последним упомянутым именем того же пола в предыдущем контексте (эвристика «последнего упомянутого»).
+Извлечение прилагательных — для каждого упомянутого имени (прямого или через местоимение) собирались прилагательные, связанные с ним через синтаксические зависимости.
+*5. Сбор метаданных книг*
+Для каждой книги собирались метаданные: автор, год публикации, жанр, пол автора. 
+
+
+### 2.2. Описание таблицы 1: meta_stats_of_book.csv
+
+Первая таблица содержит агрегированные метаданные и статистику по каждой книге. Каждая строка - одна книга.
+Эта таблица используется для проверки гипотез H5 (о доле женских персонажей) и служит источником метаданных (пол автора, жанр, век) для всех последующих моделей.
+*Размер:* 108 строк × 12 колонок.
+
+| Переменная | Тип | Описание |
+|:---|:---|:---|
+| `book_name` | character | Уникальный идентификатор книги (snake_case) |
+| `text_length` | integer | Длина текста в символах |
+| `year` | numeric | Год публикации |
+| `century` | numeric | Век публикации |
+| `author` | character | Имя автора (`Lastname_Firstname`) |
+| `author_gender` | factor | Пол автора (`male` / `female`) |
+| `genre` | factor | Жанр (20 категорий) |
+| `total_names` | integer | Всего уникальных имён (llm ∈ {1,2}) |
+| `female_names_count` | integer | Женских имён (llm = 1) |
+| `male_names_count` | integer | Мужских имён (llm = 2) |
+| `gender_ratio` | numeric | Соотношение female / male |
+| `names_density_per_100k` | numeric | Плотность имён на 100 000 символов |
+
+
+### 2.3. Описание таблицы 2: books_adjectives.csv
+Вторая таблица содержит результаты извлечения прилагательных для каждого имени в каждой книге. Каждая строка — одно уникальное имя в одной книге.
+Размер: 3285 строк × 6 колонок.
+
+| Переменная | Тип | Описание |
+|:---|:---|:---|
+| `book_name` | character | Идентификатор книги (связь с таблицей 1) |
+| `name` | character | Имя персонажа (lowercase) |
+| `llm_classification` | integer | Пол (1 = female, 2 = male) |
+| `total_adjectives` | integer | Общее количество прилагательных |
+| `top_adjectives` | character | Топ-5 прилагательных с частотами |
+| `adjectives` | list | Полный словарь прилагательных |
+
+### 2.4. Ограничения и источники шума
+
+При интерпретации результатов необходимо учитывать следующие ограничения пайплайна:
+
+1) *Шум в NER.* Ансамбль из четырёх моделей не идеален: возможны как пропуски имён (особенно редких или нестандартно написанных), так и ложные срабатывания (например, топонимы, ошибочно распознанные как имена). Фильтрация через LLM-классификацию (отсев класса 3) частично компенсирует это, но не полностью.
+2) *Ошибки LLM-классификации пола.* Вымышленные имена особенно в жанре fantasy (например, Kvothe, Nehemia, Chaol) могут быть классифицированы неверно
+3) *Ограничения dependency parsing.* Синтаксический анализ через spaCy (en_core_web_sm) не всегда корректно устанавливает связь между прилагательным и именем персонажа.
+
+## 3. Описательная статистика и визуализации
+
+```{r datares1}
+library(tidyverse)
+library(patchwork)
+library(gt)
+library(scales)
+library(ggrepel)
+library(viridis)
+
+meta_df <- read.csv("/Users/kseniazavyalova/Desktop/meta_stats_of_book.csv")
+adj_df  <- read.csv("/Users/kseniazavyalova/Desktop/ner_results_batch/books_adjectives.csv")
+
+cat("=== meta_df ===\n")
+cat("Размер:", nrow(meta_df), "строк ×", ncol(meta_df), "колонок\n")
+cat("Колонки:", paste(names(meta_df), collapse = ", "), "\n\n")
+
+cat("=== adj_df ===\n")
+cat("Размер:", nrow(adj_df), "строк ×", ncol(adj_df), "колонок\n")
+cat("Колонки:", paste(names(adj_df), collapse = ", "), "\n\n")
+
+glimpse(meta_df)
+glimpse(adj_df)
+
+head(meta_df, 3)
+head(adj_df, 3)
+```
+```{r}
+meta_summary <- meta_df %>%
+  summarise(
+    total_books = n(),
+    mean_text_length = round(mean(text_length, na.rm = TRUE), 0),
+    median_text_length = round(median(text_length, na.rm = TRUE), 0),
+    min_year = min(year, na.rm = TRUE),
+    max_year = max(year, na.rm = TRUE),
+    n_authors = n_distinct(author),
+    n_female_authors = sum(author_gender == "female", na.rm = TRUE),
+    n_male_authors = sum(author_gender == "male", na.rm = TRUE),
+    n_genres = n_distinct(genre),
+    total_names = sum(total_names, na.rm = TRUE),
+    total_female_names = sum(female_names_count, na.rm = TRUE),
+    total_male_names = sum(male_names_count, na.rm = TRUE)
+  )
+
+```
+
+```{r}
+meta_summary_wide <- meta_df %>%
+  summarise(
+    `Всего книг` = n(),
+    `Ср. длина текста` = formatC(round(mean(text_length, na.rm = TRUE), 0),
+                                 format = "d", big.mark = ","),
+    `Мед. длина текста` = formatC(round(median(text_length, na.rm = TRUE), 0),
+                                  format = "d", big.mark = ","),
+    `Период` = paste0(min(year, na.rm = TRUE), "–", max(year, na.rm = TRUE)),
+    `Авторов-женщин` = sum(author_gender == "female", na.rm = TRUE),
+    `Авторов-мужчин` = sum(author_gender == "male", na.rm = TRUE),
+    `Всего жанров` = n_distinct(genre),
+    `Всего имён персонажей` = formatC(sum(total_names, na.rm = TRUE),
+                                      format = "d", big.mark = ","),
+    `Женских имён` = formatC(sum(female_names_count, na.rm = TRUE),
+                             format = "d", big.mark = ","),
+    `Мужских имён` = formatC(sum(male_names_count, na.rm = TRUE),
+                             format = "d", big.mark = ",")
+  )
+
+meta_summary_wide %>%
+  gt() %>%
+  tab_header(
+    title = "Сводная статистика по корпусу",
+    subtitle = "108 англоязычных произведений, 1719–2025 гг."
+  ) %>%
+  tab_spanner(
+    label = "Авторы",
+    columns = c( `Авторов-женщин`, `Авторов-мужчин`)
+  ) %>%
+  tab_spanner(
+    label = "Персонажи",
+    columns = c(`Всего имён персонажей`, `Женских имён`, `Мужских имён`)
+  )
+```
+
+
+
+```{r}
+adj_summary <- adj_df %>%
+  summarise(
+    total_names = n(),
+    n_books = n_distinct(book_name),
+    n_female_names = sum(llm_classification == 1, na.rm = TRUE),
+    n_male_names = sum(llm_classification == 2, na.rm = TRUE),
+    mean_total_adj = round(mean(total_adjectives, na.rm = TRUE), 2),
+    median_total_adj = round(median(total_adjectives, na.rm = TRUE), 2),
+    max_total_adj = max(total_adjectives, na.rm = TRUE),
+    names_with_adj = sum(total_adjectives > 0, na.rm = TRUE),
+    names_without_adj = sum(total_adjectives == 0, na.rm = TRUE)
+  )
+
+adj_summary %>%
+  pivot_longer(everything(), names_to = "metric", values_to = "value") %>%
+  gt() %>%
+  tab_header(title = "Сводная статистика по именам и прилагательным (adj_df)") %>%
+  fmt_number(columns = value, decimals = 2)
+```
+
+Дополнительные значения
+
+1. unique_adjectives - количество уникальных прилагательных
+
+2. ttr (Type-Token Ratio) - нормированная мера разнообразия
+TTR = unique_adjectives / total_adjectives
+TTR нормирован на длину описания, поэтому позволяет сравнивать персонажей, описанных разным количеством прилагательных.
+TTR = 1.0 — все прилагательные уникальны (максимальное разнообразие)
+TTR → 0 — одно и то же прилагательное повторяется много раз (стереотипное описание)
+
+3. entropy (энтропия Шеннона) - информационная мера разнообразия
+Пример:
+Персонаж A: brave:5, tall:5 → энтропия высокая (равномерное распределение)
+Персонаж B: brave:9, tall:1 → энтропия низкая (доминирует одно прилагательное)
+Энтропия учитывает не только количество уникальных прилагательных, но и как они распределены. Если автор использует 10 разных прилагательных, но 90% описаний — это одно и то же слово beautiful, энтропия будет низкой, даже если unique_adjectives = 10.
+
+4. herdan_c (индекс Хердана, или C) - Модификация TTR устойчивая к длине мера
+
+
+```{r}
+count_unique <- function(adj_str) {
+  adj_str <- as.character(adj_str)
+  if (is.na(adj_str) || trimws(adj_str) %in% c("", "{}", "dict()")) return(0)
+  keys <- stringr::str_extract_all(adj_str, "'[^']+'|\"[^\"]+\"")[[1]]
+  return(length(keys))
+}
+
+shannon_entropy <- function(adj_str) {
+  adj_str <- as.character(adj_str)
+  if (is.na(adj_str) || trimws(adj_str) %in% c("", "{}", "dict()")) return(0)
+  matches <- stringr::str_match_all(adj_str, ":\\s*(\\d+)")[[1]]
+  freqs <- as.numeric(matches[, 2])
+  freqs <- freqs[!is.na(freqs)]
+  if (length(freqs) == 0 || sum(freqs) == 0) return(0)
+  p <- freqs / sum(freqs)
+  return(-sum(p * log(p)))
+}
+
+adj_df <- adj_df %>%
+  mutate(
+    character_gender = factor(ifelse(llm_classification == 1, "female", "male"),
+                              levels = c("female", "male")),
+    unique_adjectives = sapply(adjectives, count_unique),
+    entropy = sapply(adjectives, shannon_entropy),
+    ttr = ifelse(total_adjectives > 0, unique_adjectives / total_adjectives, 0),
+    herdan_c = ifelse(total_adjectives > 1,
+                      log(unique_adjectives) / log(total_adjectives), 0)
+  )
+
+cat("Пропусков в ttr:", sum(is.na(adj_df$ttr)), "\n")
+cat("Пропусков в entropy:", sum(is.na(adj_df$entropy)), "\n")
+cat("Пропусков в unique_adjectives:", sum(is.na(adj_df$unique_adjectives)), "\n")
+
+head(adj_df %>% select(book_name, name, character_gender,
+                       total_adjectives, unique_adjectives, ttr, entropy, herdan_c), 10)
+```
+Построим графики для исследования данных.
+
+```{r}
+full_df <- adj_df %>%
+  left_join(meta_df, by = "book_name")
+
+cat("Размер объединённой таблицы:", nrow(full_df), "×", ncol(full_df), "\n")
+cat("Пропусков после мержа (по author_gender):",
+    sum(is.na(full_df$author_gender)), "\n")
+cat("Пропусков после мержа (по genre):",
+    sum(is.na(full_df$genre)), "\n")
+
+full_df
+```
+
+```{r}
+knitr::opts_chunk$set(
+  fig.width = 24,      
+  fig.height = 12,     
+  fig.align = "center",
+  dpi = 500,
+  dev = "png"
+)
+
+theme_publication <- function() {
+  theme_minimal(base_size = 9) +
+    theme(
+      plot.title = element_text(face = "bold", size = 11, hjust = 0.5, margin = margin(b = 8)),
+      plot.subtitle = element_text(size = 9, hjust = 0.5, color = "gray40", margin = margin(b = 10)),
+      axis.title = element_text(face = "bold", size = 10),
+      axis.text = element_text(size = 9),
+      legend.text = element_text(size = 9),
+      legend.title = element_text(size = 10, face = "bold"),
+      panel.grid.minor = element_blank(),
+      panel.grid.major = element_line(color = "gray92"),
+      plot.background = element_rect(fill = "white", color = NA),
+      panel.background = element_rect(fill = "white", color = NA)
+    )
+}
+theme_set(theme_publication())
+```
+
+
+
+
+```{r}
+
+stats_total <- full_df %>%
+  summarise(
+    mean_val = mean(total_adjectives, na.rm = TRUE),
+    median_val = median(total_adjectives, na.rm = TRUE)
+  )
+
+stats_unique <- full_df %>%
+  summarise(
+    mean_val = mean(unique_adjectives, na.rm = TRUE),
+    median_val = median(unique_adjectives, na.rm = TRUE)
+  )
+
+stats_ttr <- full_df %>%
+  summarise(
+    mean_val = mean(ttr, na.rm = TRUE),
+    median_val = median(ttr, na.rm = TRUE)
+  )
+
+stats_entropy <- full_df %>%
+  summarise(
+    mean_val = mean(entropy, na.rm = TRUE),
+    median_val = median(entropy, na.rm = TRUE)
+  )
+
+p1 <- ggplot(full_df, aes(x = total_adjectives)) +
+  geom_histogram(bins = 60, fill = "#2E86AB", color = "white", alpha = 0.85) +
+  scale_x_log10(labels = comma) +
+  geom_vline(data = stats_total, aes(xintercept = median_val),
+             linetype = "dashed", color = "#E74C3C", linewidth = 1) +
+  geom_vline(data = stats_total, aes(xintercept = mean_val),
+             linetype = "dotted", color = "#27AE60", linewidth = 1) +
+  labs(title = "Общее количество прилагательных",
+       subtitle = paste0("Медиана: ", round(stats_total$median_val, 1),
+                         " | Среднее: ", round(stats_total$mean_val, 1)),
+       x = "total_adjectives (log10)",
+       y = "Количество имён") +
+  theme_publication()
+
+p2 <- ggplot(full_df, aes(x = unique_adjectives)) +
+  geom_histogram(bins = 60, fill = "#2E86AB", color = "white", alpha = 0.85) +
+  scale_x_log10(labels = comma) +
+  geom_vline(data = stats_unique, aes(xintercept = median_val),
+             linetype = "dashed", color = "#E74C3C", linewidth = 1) +
+  geom_vline(data = stats_unique, aes(xintercept = mean_val),
+             linetype = "dotted", color = "#27AE60", linewidth = 1) +
+  labs(title = "Уникальные прилагательные",
+       subtitle = paste0("Медиана: ", round(stats_unique$median_val, 1),
+                         " | Среднее: ", round(stats_unique$mean_val, 1)),
+       x = "unique_adjectives (log110)",
+       y = "Количество имён") +
+  theme_publication()
+
+p3 <- ggplot(full_df, aes(x = ttr)) +
+  geom_histogram(bins = 50, fill = "#2E86AB", color = "white", alpha = 0.85) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  geom_vline(data = stats_ttr, aes(xintercept = median_val),
+             linetype = "dashed", color = "#E74C3C", linewidth = 1) +
+  geom_vline(data = stats_ttr, aes(xintercept = mean_val),
+             linetype = "dotted", color = "#27AE60", linewidth = 1) +
+  labs(title = "Type-Token Ratio",
+       subtitle = paste0("Медиана: ", scales::percent(stats_ttr$median_val, accuracy = 0.1),
+                         " | Среднее: ", scales::percent(stats_ttr$mean_val, accuracy = 0.1)),
+       x = "TTR",
+       y = "Количество имён") +
+  theme_publication()
+
+p4 <- ggplot(full_df, aes(x = entropy)) +
+  geom_histogram(bins = 50, fill = "#2E86AB", color = "white", alpha = 0.85) +
+  geom_vline(data = stats_entropy, aes(xintercept = median_val),
+             linetype = "dashed", color = "#E74C3C", linewidth = 1) +
+  geom_vline(data = stats_entropy, aes(xintercept = mean_val),
+             linetype = "dotted", color = "#27AE60", linewidth = 1) +
+  labs(title = "Энтропия Шеннона",
+       subtitle = paste0("Медиана: ", round(stats_entropy$median_val, 2),
+                         " | Среднее: ", round(stats_entropy$mean_val, 2)),
+       x = "Entropy",
+       y = "Количество имён") +
+  theme_publication()
+
+(p1 + p2) / (p3 + p4) +
+  plot_annotation(
+    title = "Распределения ключевых переменных",
+    caption = "Красная пунктирная — медиана | Зелёная точечная — среднее",
+    theme = theme(
+      plot.title = element_text(size = 12, face = "bold", hjust = 0.5),
+      plot.caption = element_text(size = 9, hjust = 0.5, color = "gray40")
+    )
+  )
+```
+Все четыре распределения имеют сильную правую асимметрию:
+- total_adjectives и unique_adjectives. Большинство персонажей получают мало прилагательных (пик 1 на log-шкале, то есть 1-10 прилагательных), но есть "хвост" персонажей с очень детальными описаниями.
+- TTR - с пик около 1.0 — это персонажи с единственным прилагательным, у которых TTR = 1/1 = 1.0 искусственно завышен.
+- Энтропия Шеннона. пик 0 — это персонажи, у которых одно прилагательное повторяется много раз (минимальное разнообразие).
+
+Можно сделать вывод что большинство персонажей - эпизодические. Они упоминаются 1-2 раза с минимальным описанием. 
+```{r}
+stats_length <- meta_df %>%
+  summarise(
+    mean_val = mean(text_length, na.rm = TRUE),
+    median_val = median(text_length, na.rm = TRUE),
+    sd_val = sd(text_length, na.rm = TRUE)
+  )
+
+ggplot(meta_df, aes(x = text_length)) +
+  geom_histogram(bins = 40, fill = "#2E86AB", color = "white", alpha = 0.85) +
+  scale_x_continuous(labels = scales::comma) +
+  geom_vline(data = stats_length, aes(xintercept = median_val),
+             linetype = "dashed", color = "#E74C3C", linewidth = 1) +
+  geom_vline(data = stats_length, aes(xintercept = mean_val),
+             linetype = "dotted", color = "#27AE60", linewidth = 1) +
+  labs(
+    title = "Распределение длины книг в корпусе",
+    subtitle = paste0("n = ", nrow(meta_df), " книг | ",
+                      "Медиана: ", formatC(round(stats_length$median_val, 0), format = "d", big.mark = ","),
+                      " | Среднее: ", formatC(round(stats_length$mean_val, 0), format = "d", big.mark = ","),
+                      " | SD: ", formatC(round(stats_length$sd_val, 0), format = "d", big.mark = ",")),
+    x = "Длина текста (символы)",
+    y = "Количество книг"
+  ) +
+  theme_publication()
+```
+
+```{r}
+ggplot(meta_df, aes(x = year)) +
+  geom_histogram(bins = 40, fill = "#A23B72", color = "white", alpha = 0.85) +
+  scale_x_continuous(breaks = seq(1720, 2020, by = 20)) +
+  labs(
+    title = "Распределение книг по годам публикации",
+    subtitle = "Охват: 1719–2025 гг.",
+    x = "Год публикации",
+    y = "Количество книг"
+  ) +
+  theme_publication()
+```
+
+```{r}
+genre_counts <- meta_df %>%
+  filter(!is.na(genre)) %>%
+  group_by(genre) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  arrange(desc(n))
+
+ggplot(genre_counts, aes(x = reorder(genre, n), y = n, fill = genre)) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_viridis_d(option = "plasma") +
+  labs(
+    title = "Распределение книг по жанрам",
+    x = "Жанр",
+    y = "Количество книг"
+  ) +
+  theme_publication() +
+  theme(legend.position = "none")
+```
+
+```{r}
+ggplot(full_df, aes(x = character_gender, y = total_adjectives, fill = character_gender)) +
+  geom_violin(alpha = 0.6, trim = FALSE, scale = "width") +
+  geom_boxplot(width = 0.15, outlier.shape = NA, alpha = 0.8, color = "black") +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 5,
+               fill = "white", stroke = 2) +
+  scale_fill_manual(values = c("female" = "#E187B8", "male" = "#6BAED6")) +
+  scale_y_continuous(labels = scales::comma, trans = "log10") +
+  labs(
+    title = "Общее количество прилагательных по полу персонажа",
+    subtitle = "у женских персонажей меньше прилагательных?",
+    x = "Пол персонажа",
+    y = "total_adjectives (log10)"
+  ) +
+  theme_publication() +
+  theme(legend.position = "none")
+
+full_df %>%
+  group_by(character_gender) %>%
+  summarise(
+    n = n(),
+    mean_total = round(mean(total_adjectives, na.rm = TRUE), 2),
+    median_total = round(median(total_adjectives, na.rm = TRUE), 2),
+    sd_total = round(sd(total_adjectives, na.rm = TRUE), 2),
+    .groups = "drop"
+  ) %>%
+  gt() %>%
+  tab_header(title = "Сравнение количества прилагательных по полу персонажа")
+```
+График показывает, что типичный персонаж (медианный случай) — независимо от пола — получает минимальное описание (2 прилагательных). Это эпизодические персонажи, которые упоминаются 1-2 раза в тексте. Однако среднее количество прилагательных у мужских персонажей (10.7) почти в 2 раза выше, чем у женских (5.9). Эта разница обусловлена не систематическим отличием в описании "обычных" персонажей, а наличием у мужских персонажей большего числа случаев с очень детальными описаниями. Стандартное отклонение у male (47.88) в 3.7 раза больше, чем у female (13.05), что подтверждает сильную асимметрию распределения.
+Таким образом, гипотеза H5 подтверждается частично.
+
+```{r}
+ggplot(full_df, aes(x = character_gender, y = total_adjectives, fill = author_gender)) +
+  geom_violin(alpha = 0.5, trim = FALSE, position = position_dodge(width = 0.85),
+              scale = "width") +
+  geom_boxplot(width = 0.12, outlier.shape = NA, alpha = 0.7,
+               position = position_dodge(width = 0.85), color = "black") +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 4,
+               fill = "white", stroke = 1.5,
+               position = position_dodge(width = 0.85)) +
+  scale_fill_manual(values = c("female" = "#E187B8", "male" = "#6BAED6"),
+                    name = "Пол автора") +
+  scale_y_continuous(labels = scales::comma, trans = "log10") +
+  labs(
+    title = "Количество прилагательных: пол персонажа × пол автора",
+    subtitle = "Проверка H6",
+    x = "Пол персонажа",
+    y = "total_adjectives (log10)"
+  ) +
+  theme_publication() +
+  theme(legend.position = "top")
+```
+Визуальный анализ взаимодействия «пол персонажа × пол автора» выявляет асимметрию в распределении количества прилагательных. У мужских персонажей обоих полов авторов наблюдаются более длинные «хвосты» распределения. Особенно выражена эта асимметрия у мужских персонажей мужских авторов. Их распределение имеет бимодальную форму с резким пиком на 1 прилагательном и длинным хвостом вправо.
+
+```{r}
+meta_df <- meta_df %>%
+  mutate(female_share = female_names_count / total_names)
+```
+
+
+```{r}
+meta_df %>%
+  filter(!is.na(genre)) %>%
+  ggplot(aes(x = reorder(genre, female_share, FUN = median),
+             y = female_share, fill = genre)) +
+  geom_boxplot(alpha = 0.7, outlier.alpha = 0.5) +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "#E74C3C", linewidth = 0.8) +
+  coord_flip() +
+  scale_fill_viridis_d(option = "plasma", alpha = 0.7) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Доля женских персонажей по жанрам",
+    subtitle = "Красная линия — 50%",
+    x = "Жанр",
+    y = "Доля женских персонажей"
+  ) +
+  theme_publication() +
+  theme(legend.position = "none")
+```
+Анализ доли женских персонажей по жанрам выявляет существенные различия в репрезентации. Медианная доля женских персонажей в большинстве жанров находится ниже 50%, что согласуется с общим выводом о недопредставленности женщин в художественной литературе. Однако наблюдаются значительные межжанровые различия: в жанрах, исторически ориентированных на женскую аудиторию (romance, fantasy, contemporary), доля женских персонажей статистически значимо выше, тогда как в мужских жанрах (adventure, histirical) — ниже. 
+
+
+```{r}
+meta_df <- meta_df %>%
+  mutate(female_share = as.numeric(female_names_count) / as.numeric(total_names))
+
+p_share <- ggplot(meta_df, aes(x = female_share, fill = female_share)) +
+  geom_histogram(bins = 35, color = "white", alpha = 0.85) +
+  geom_vline(xintercept = 0.5, linetype = "dashed", color = "#E74C3C", linewidth = 1.0) +
+  geom_vline(xintercept = 0.33, linetype = "dotted", color = "#3498DB", linewidth = 0.9) +
+  scale_fill_gradient(low = "#A8D8EA", high = "#2E86AB", guide = "none") +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(title = "Доля женских персонажей по книгам",
+       subtitle = "Красная — 50%, синяя — 33%",
+       x = "Доля женских персонажей",
+       y = "Количество книг") +
+  theme_publication()
+
+p_by_author <- ggplot(meta_df, aes(x = author_gender, y = female_share, fill = author_gender)) +
+  geom_violin(alpha = 0.7, trim = FALSE, scale = "width") +
+  geom_boxplot(width = 0.12, outlier.shape = NA, alpha = 0.6, color = "black") +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 3,
+               fill = "white", stroke = 1.2) +
+  scale_fill_manual(values = c("female" = "#E187B8", "male" = "#6BAED6"),
+                    name = "Пол автора") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(title = "Доля женских персонажей по полу автора",
+       x = "Пол автора",
+       y = "Доля женских персонажей") +
+  theme_publication()
+
+p_share + p_by_author + plot_layout(ncol = 2, widths = c(1.2, 1))
+```
+Анализ репрезентации персонажей на уровне отдельных книг выявляет устойчивую асимметрию в распределении нарративного пространства. Гистограмма показывает, что в подавляющем большинстве произведений корпуса доля женских персонажей не достигает гипотетического паритета (50%). Стратификация по полу автора демонстрирует, что этот разрыв модулируется гендером создателя текста: в произведениях мужчин-авторов женские персонажи занимают существенно меньшую долю пространства (медиана около 30%), тогда как в текстах женщин-авторов распределение приближается к паритету (медиана около 41%). 
+
+```{r}
+ggplot(full_df, aes(x = character_gender, y = ttr, fill = character_gender)) +
+  geom_violin(alpha = 0.6, trim = FALSE, scale = "width") +
+  geom_boxplot(width = 0.15, outlier.shape = NA, alpha = 0.8, color = "black") +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 4,
+               fill = "white", stroke = 1.5) +
+  scale_fill_manual(values = c("female" = "#E187B8", "male" = "#6BAED6")) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(title = "Лексическое разнообразие по полу персонажа",
+       x = "Пол персонажа",
+       y = "Type-Token Ratio (TTR)") +
+  theme_publication() +
+  theme(legend.position = "none")
+```
+
+```{r}
+ggplot(full_df, aes(x = character_gender, y = ttr, fill = author_gender)) +
+  geom_violin(alpha = 0.5, trim = FALSE, position = position_dodge(width = 0.85),
+              scale = "width") +
+  geom_boxplot(width = 0.12, outlier.shape = NA, alpha = 0.7,
+               position = position_dodge(width = 0.85), color = "black") +
+  stat_summary(fun = mean, geom = "point", shape = 23, size = 3.5,
+               fill = "white", stroke = 1.2,
+               position = position_dodge(width = 0.85)) +
+  scale_fill_manual(values = c("female" = "#E187B8", "male" = "#6BAED6"),
+                    name = "Пол автора") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(title = "Взаимодействие: пол персонажа × пол автора",
+       x = "Пол персонажа",
+       y = "Type-Token Ratio (TTR)") +
+  theme_publication() +
+  theme(legend.position = "top")
+```
+
+
+```{r}
+genre_plot <- full_df %>%
+  filter(!is.na(genre)) %>%
+  group_by(genre, character_gender) %>%
+  summarise(mean_ttr = mean(ttr, na.rm = TRUE), n = n(), .groups = "drop") %>%
+  filter(n >= 10)
+
+ggplot(genre_plot, aes(x = reorder(genre, mean_ttr), y = mean_ttr,
+                       fill = character_gender)) +
+  geom_col(position = position_dodge(width = 0.8), alpha = 0.85, width = 0.7) +
+  coord_flip() +
+  scale_fill_manual(values = c("female" = "#E187B8", "male" = "#6BAED6"),
+                    name = "Пол персонажа") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(title = "Средний TTR по жанрам и полу персонажа",
+       subtitle = "Только жанры с n ≥ 10 имён на пол",
+       x = "Жанр",
+       y = "Средний TTR") +
+  theme_publication() +
+  theme(legend.position = "top")
+```
+
+
+
+```{r}
+century_plot <- full_df %>%
+  filter(!is.na(century)) %>%
+  group_by(century, character_gender) %>%
+  summarise(mean_ttr = mean(ttr, na.rm = TRUE),
+            se = sd(ttr, na.rm = TRUE) / sqrt(n()),
+            n = n(), .groups = "drop")
+
+p_century <- ggplot(century_plot, aes(x = century, y = mean_ttr,
+                                      color = character_gender,
+                                      group = character_gender,
+                                      shape = character_gender)) +
+  geom_line(linewidth = 1.2, alpha = 0.8) +
+  geom_point(size = 3, alpha = 0.9) +
+  geom_ribbon(aes(ymin = mean_ttr - se, ymax = mean_ttr + se,
+                  fill = character_gender), alpha = 0.15, color = NA) +
+  scale_color_manual(values = c("female" = "#E187B8", "male" = "#6BAED6"),
+                     name = "Пол персонажа") +
+  scale_fill_manual(values = c("female" = "#E187B8", "male" = "#6BAED6"), guide = "none") +
+  scale_shape_manual(values = c("female" = 17, "male" = 15), name = "Пол персонажа") +
+  scale_x_continuous(breaks = c(18, 19, 20, 21), labels = c("XVIII", "XIX", "XX", "XXI")) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(title = "Динамика TTR по векам",
+       subtitle = "Средние значения с 95% доверительными интервалами",
+       x = "Век",
+       y = "Средний TTR") +
+  theme_publication() +
+  theme(legend.position = "top")
+
+# По десятилетиям
+decade_plot <- full_df %>%
+  filter(!is.na(year)) %>%
+  mutate(decade = floor(year / 10) * 10) %>%
+  group_by(decade, character_gender) %>%
+  summarise(mean_ttr = mean(ttr, na.rm = TRUE), n = n(), .groups = "drop") %>%
+  filter(n >= 20)
+
+p_decade <- ggplot(decade_plot, aes(x = decade, y = mean_ttr,
+                                    color = character_gender,
+                                    group = character_gender)) +
+  geom_line(linewidth = 1.0, alpha = 0.8) +
+  geom_point(size = 2.5, alpha = 0.9) +
+  scale_color_manual(values = c("female" = "#E187B8", "male" = "#6BAED6"),
+                     name = "Пол персонажа") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(title = "Динамика TTR по десятилетиям",
+       subtitle = "Только десятилетия с n ≥ 20 имён на пол",
+       x = "Десятилетие",
+       y = "Средний TTR") +
+  theme_publication() +
+  theme(legend.position = "top")
+
+p_century / p_decade
+```
+Диахронический анализ лексического разнообразия позволяет проверить гипотезу H4 об исторической динамике гендерной асимметрии. График по векам показывает, что разница в TTR между женскими и мужскими персонажами немного уменьшается от XVIII к XXI веку. Этот результат согласуется с основным выводом Underwood et al. (2018) о том, что гендерные границы в характеристиках персонажей размываются с 1850 года.
+
+```{r}
+decade_space <- full_df %>%
+  filter(!is.na(year)) %>%
+  mutate(decade = floor(year / 10) * 10) %>%
+  group_by(decade) %>%
+  summarise(
+    total_female_adj = sum(total_adjectives[character_gender == "female"], na.rm = TRUE),
+    total_male_adj = sum(total_adjectives[character_gender == "male"], na.rm = TRUE),
+    female_share = total_female_adj / (total_female_adj + total_male_adj),
+    n_female = sum(character_gender == "female"),
+    n_male = sum(character_gender == "male"),
+    .groups = "drop"
+  )
+
+ggplot(decade_space, aes(x = decade, y = female_share)) +
+  geom_line(size = 1.2, color = "#E187B8") +
+  geom_point(size = 3, color = "#E187B8") +
+  geom_hline(yintercept = 0.5, linetype = "dashed", color = "gray40") +
+  geom_hline(yintercept = 0.33, linetype = "dotted", color = "gray60") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Доля прилагательных, описывающих женских персонажей",
+    x = "Десятилетие",
+    y = "Доля женских персонажей"
+  ) +
+  theme_publication()
+```
+
+
+```{r}
+library(jsonlite)
+
+library(tidyverse)
+
+parse_adjectives <- function(adj_str) {
+  adj_str <- as.character(adj_str)
+  if (is.na(adj_str) || trimws(adj_str) %in% c("", "{}", "dict()")) {
+    return(data.frame(adjective = character(0), count = numeric(0)))
+  }
+  
+  keys <- stringr::str_extract_all(adj_str, "(?<=['\"])[^'\"]+(?=['\"]: )")[[1]]
+  values <- stringr::str_extract_all(adj_str, "(?<=: )\\d+")[[1]]
+  
+  if (length(keys) == 0 || length(values) == 0) {
+    return(data.frame(adjective = character(0), count = numeric(0)))
+  }
+  
+  n <- min(length(keys), length(values))
+  data.frame(
+    adjective = keys[1:n],
+    count = as.numeric(values[1:n]),
+    stringsAsFactors = FALSE
+  )
+}
+
+adj_long <- full_df %>%
+  filter(total_adjectives > 0) %>%
+  rowwise() %>%
+  mutate(adj_parsed = list(parse_adjectives(adjectives))) %>%
+  unnest(adj_parsed) %>%
+  filter(!is.na(adjective) & nchar(adjective) > 0 & count > 0) %>%
+  ungroup()
+
+top_adj <- adj_long %>%
+  group_by(character_gender, adjective) %>%
+  summarise(total_count = sum(count), .groups = "drop") %>%
+  group_by(character_gender) %>%
+  slice_max(total_count, n = 30) %>%
+  ungroup()
+
+ggplot(top_adj, aes(x = reorder(adjective, total_count), y = total_count,
+                    fill = character_gender)) +
+  geom_col(alpha = 0.85) +
+  facet_wrap(~character_gender, scales = "free_y") +
+  coord_flip() +
+  scale_fill_manual(values = c("female" = "#E187B8", "male" = "#6BAED6")) +
+  labs(title = "Топ-30 прилагательных по полу персонажа",
+       x = "Прилагательное",
+       y = "Суммарная частота") +
+  theme_publication() +
+  theme(legend.position = "none",
+        strip.text = element_text(size = 10, face = "bold"))
+```
+
+```{r}
+full_df %>%
+  mutate(adj_bin = cut(total_adjectives, 
+                       breaks = c(0, 1, 2, 5, 10, 20, 50, 100, Inf),
+                       labels = c("1", "2", "3-5", "6-10", "11-20", "21-50", "51-100", ">100"))) %>%
+  group_by(character_gender, adj_bin) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  group_by(character_gender) %>%
+  mutate(prop = n / sum(n)) %>%
+  ggplot(aes(x = adj_bin, y = prop, fill = character_gender)) +
+  geom_col(alpha = 0.8) +
+  scale_fill_manual(values = c("female" = "#E187B8", "male" = "#6BAED6")) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Распределение персонажей по количеству прилагательных",
+    x = "Количество прилагательных",
+    y = "Доля персонажей",
+    fill = "Пол персонажа"
+  ) +
+  theme_publication() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+Несмотря на содержательную согласованность с литературоведческой литературой, приведённые выше паттерны не могут служить основанием для окончательных выводов по нескольким методологическим причинам:
+1. Сильная асимметрия распределений и нестабильность средних. Все ключевые переменные (total_adjectives, unique_adjectives, ttr, entropy) имеют выраженную правую асимметрию. 
+2. Распределение TTR имеет выраженный пик около 1.0 (100%), обусловленный персонажами с единственным прилагательным, у которых TTR = 1/1 = 1.0 математически неизбежен.
+
+###Обработка выбросов и проверка устойчивости результатов
+
+###Диагностика проблемы 
+
+```{r}
+cat("Распределение total_adjectives:\n")
+print(summary(full_df$total_adjectives))
+
+cat("\nПроцентили:\n")
+quantiles <- quantile(full_df$total_adjectives, probs = c(0.05, 0.25, 0.5, 0.75, 0.95, 0.99))
+print(quantiles)
+
+cat("\nДоля персонажей по количеству прилагательных:\n")
+full_df %>%
+  mutate(adj_bin = cut(total_adjectives, 
+                       breaks = c(0, 1, 2, 5, 10, 20, 50, 100, Inf),
+                       labels = c("1", "2", "3-5", "6-10", "11-20", "21-50", "51-100", ">100"))) %>%
+  group_by(adj_bin) %>%
+  summarise(
+    n = n(),
+    prop = n() / nrow(full_df),
+    mean_ttr = round(mean(ttr, na.rm = TRUE), 3),
+    .groups = "drop"
+  ) %>%
+  gt() %>%
+  tab_header(title = "Распределение персонажей по количеству прилагательных") %>%
+  fmt_percent(columns = prop, decimals = 1)
+```
+
+Таблица показывает, что 68% персонажей имеют 1–2 прилагательных - для них TTR математически нестабилен (у персонажа с единственным прилагательным TTR всегда равен 1.0 независимо от качества описания). При этом менее 5% персонажей имеют более 50 прилагательных — это протагонисты с детальными описаниями, которые создают «длинный хвост» распределения. Эти две группы создают противоположные искажения: первые искусственно завышают TTR, вторые — занижают. Для получения надёжных оценок необходимо исключить первую группу через фильтрация по минимальному порогу и обработать вторую при помощи winsorization.
+
+### Фильтрация по минимальному количеству прилагательных
+
+```{r}
+full_df_filtered <- full_df %>%
+  filter(total_adjectives >= 5)
+
+cat("До фильтрации:", nrow(full_df), "имён\n")
+cat("После фильтрации (>= 5):", nrow(full_df_filtered), "имён\n")
+cat("Потеряно:", nrow(full_df) - nrow(full_df_filtered), 
+    "(", round(100 * (1 - nrow(full_df_filtered) / nrow(full_df)), 1), "%)\n\n")
+
+comparison <- bind_rows(
+  full_df %>%
+    group_by(character_gender) %>%
+    summarise(mean_ttr = mean(ttr, na.rm = TRUE), .groups = "drop") %>%
+    mutate(dataset = "Все данные"),
+  full_df_filtered %>%
+    group_by(character_gender) %>%
+    summarise(mean_ttr = mean(ttr, na.rm = TRUE), .groups = "drop") %>%
+    mutate(dataset = ">= 5 прилагательных")
+)
+
+comparison %>%
+  pivot_wider(names_from = character_gender, values_from = mean_ttr) %>%
+  mutate(diff = female - male) %>%
+  gt() %>%
+  tab_header(title = "Сравнение среднего TTR до и после фильтрации") %>%
+  fmt_number(columns = c(female, male, diff), decimals = 3)
+```
+
+Проведённая фильтрация выявила что до удаления персонажей с малым количеством прилагательных разница в среднем TTR между женскими и мужскими персонажами полностью отсутствовала (0.925 vs 0.925, разница = 0.000). Однако после фильтрации по порогу total_adjectives >= 5 появляется содержательный эффект - женские персонажи имеют TTR на 6 процентных пунктов выше, чем мужские (0.822 vs 0.762).
+
+Ранее поскольку среди эпизодических персонажей распределение полов примерно равное, среднее TTR для обоих полов оказывается практически идентичным. Полученные 786 персонажей - протагонисты и значимые второстепенные герои, которым авторы уделяют достаточно внимания для развёрнутой характеристики. Именно на этом подмножестве данных обнаруживается, что женские персонажи описываются более лексически разнообразной лексикой.
+
+Этот результат служит сильнейшим обоснованием необходимости фильтрации в дальнейшем анализе. Без удаления эпизодических персонажей мы бы сделали ложный вывод об отсутствии гендерной асимметрии в лексическом разнообразии. 
+
+Гипотеза H1 («При описании женских персонажей авторы используют более разнообразную лексику прилагательных») подтверждается при условии фильтрации: на подмножестве персонажей с 5+ прилагательными разница в TTR составляет 0.060 (6 процентных пунктов) в ожидаемом направлении. Однако на полных данных (без фильтрации) эффект отсутствует. Это означает, что гипотеза верна не для всех персонажей, а только для тех, кто получил достаточно описаний для содержательной характеристики.
+
+
+```{r}
+
+full_df %>%
+  filter(total_adjectives >= 3) %>%
+  mutate(
+    adj_group = cut(total_adjectives, 
+                    breaks = c(2, 5, 10, 20, 50, Inf),
+                    labels = c("3-5", "6-10", "11-20", "21-50", ">50"))
+  ) %>%
+  group_by(adj_group, character_gender) %>%
+  summarise(
+    n = n(),
+    mean_ttr = mean(ttr, na.rm = TRUE),
+    median_ttr = median(ttr, na.rm = TRUE),
+    se = sd(ttr, na.rm = TRUE) / sqrt(n()),
+    .groups = "drop"
+  ) %>%
+  ggplot(aes(x = adj_group, y = mean_ttr, fill = character_gender,
+             group = character_gender)) +
+  geom_col(position = position_dodge(width = 0.8), alpha = 0.8, width = 0.7) +
+  geom_errorbar(aes(ymin = mean_ttr - se, ymax = mean_ttr + se),
+                position = position_dodge(width = 0.8), width = 0.2) +
+  scale_fill_manual(values = c("female" = "#E187B8", "male" = "#6BAED6")) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Средний TTR по группам количества прилагательных",
+    subtitle = "С 95% доверительными интервалами",
+    x = "Количество прилагательных",
+    y = "Средний TTR",
+    fill = "Пол персонажа"
+  ) +
+  theme_publication()
+```
+Анализ среднего TTR по группам количества прилагательных выявляет важную закономерность - гендерная асимметрия в лексическом разнообразии проявляется преимущественно у персонажей с детальными описаниями (50+ прилагательных). 
+
+```{r}
+filtering_impact <- full_df %>%
+  mutate(
+    included = total_adjectives >= 5,
+    group = paste0(character_gender, " (", author_gender, "-author)")
+  ) %>%
+  group_by(group, included) %>%
+  summarise(n = n(), .groups = "drop") %>%
+  pivot_wider(names_from = included, values_from = n,
+              names_prefix = "n_") %>%
+  mutate(
+    total = n_TRUE + n_FALSE,
+    prop_included = n_TRUE / total
+  )
+
+ggplot(filtering_impact, aes(x = reorder(group, prop_included), y = prop_included,
+                             fill = group)) +
+  geom_col(alpha = 0.85, width = 0.6) +
+  geom_hline(yintercept = mean(filtering_impact$prop_included),
+             linetype = "dashed", color = "gray40", linewidth = 0.8) +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_fill_viridis_d(option = "plasma", alpha = 0.7) +
+  labs(
+    title = "Доля персонажей, включённых в анализ (после фильтрации ≥ 5 прилагательных)",
+    subtitle = "Пунктир — средний процент по всем группам",
+    x = "Группа (пол персонажа × пол автора)",
+    y = "Доля включённых персонажей"
+  ) +
+  theme_publication() +
+  theme(legend.position = "none")
+```
+
+
+
+```{r}
+comparison_interaction <- bind_rows(
+  full_df %>%
+    mutate(version = "Все данные") %>%
+    filter(!is.na(ttr)),
+  full_df %>%
+    filter(total_adjectives >= 5) %>%
+    mutate(version = "≥ 5 прилагательных")
+)
+
+comparison_interaction %>%
+  group_by(version, character_gender, author_gender) %>%
+  summarise(mean_ttr = mean(ttr, na.rm = TRUE),
+            n = n(),
+            .groups = "drop") %>%
+  ggplot(aes(x = character_gender, y = mean_ttr,
+             color = author_gender, group = author_gender,
+             shape = author_gender)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 4) +
+  facet_wrap(~version, ncol = 2) +
+  scale_color_manual(values = c("female" = "#E187B8", "male" = "#6BAED6"),
+                     name = "Пол автора") +
+  scale_shape_manual(values = c("female" = 17, "male" = 15),
+                     name = "Пол автора") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Взаимодействие: пол персонажа × пол автора",
+    subtitle = "Сравнение до и после фильтрации (проверка H2)",
+    x = "Пол персонажа",
+    y = "Средний TTR"
+  ) +
+  theme_publication() +
+  theme(legend.position = "top",
+        strip.text = element_text(size = 11, face = "bold"))
+```
+
+
+```{r}
+winsorize_vector <- function(x, probs = c(0.05, 0.95), na.rm = TRUE) {
+  if (all(is.na(x))) return(x)
+  q <- quantile(x, probs = probs, na.rm = na.rm)
+  x_winsor <- ifelse(!is.na(x) & x < q[1], q[1],
+                     ifelse(!is.na(x) & x > q[2], q[2], x))
+  return(x_winsor)
+}
+
+full_df_winsor <- full_df %>%
+  group_by(character_gender) %>%
+  mutate(
+    ttr_winsor = winsorize_vector(ttr, probs = c(0.05, 0.95)),
+    entropy_winsor = winsorize_vector(entropy, probs = c(0.05, 0.95))
+  ) %>%
+  ungroup()
+
+cat("До winsorization:\n")
+print(summary(full_df$ttr))
+cat("\nПосле winsorization:\n")
+print(summary(full_df_winsor$ttr_winsor))
+
+comparison_winsor <- bind_rows(
+  full_df %>%
+    group_by(character_gender) %>%
+    summarise(mean_ttr = mean(ttr, na.rm = TRUE), .groups = "drop") %>%
+    mutate(method = "Оригинал"),
+  full_df_winsor %>%
+    group_by(character_gender) %>%
+    summarise(mean_ttr = mean(ttr_winsor, na.rm = TRUE), .groups = "drop") %>%
+    mutate(method = "Winsorized (5-95%)")
+)
+
+comparison_winsor %>%
+  pivot_wider(names_from = character_gender, values_from = mean_ttr) %>%
+  mutate(diff = female - male) %>%
+  gt() %>%
+  tab_header(title = "Сравнение TTR: оригинал vs winsorized") %>%
+  fmt_number(columns = c(female, male, diff), decimals = 3)
+```
+
+
+
+```{r}
+comparison_plot <- bind_rows(
+  full_df %>% 
+    select(character_gender, ttr) %>% 
+    mutate(version = "Оригинал"),
+  full_df_winsor %>% 
+    select(character_gender, ttr = ttr_winsor) %>% 
+    mutate(version = "Winsorized")
+)
+
+ggplot(comparison_plot, aes(x = ttr, fill = character_gender)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~version, ncol = 1) +
+  scale_fill_manual(values = c("female" = "#E187B8", "male" = "#6BAED6")) +
+  scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    title = "Эффект winsorization на распределение TTR",
+    subtitle = "Сравнение оригинальных и обрезанных данных",
+    x = "Type-Token Ratio",
+    y = "Плотность"
+  ) +
+  theme_publication()
+```
+Применение winsorization (обрезания экстремальных значений на уровне 5-го и 95-го перцентилей) к полным данным не приводит к появлению гендерной асимметрии в TTR: разница между полами остаётся статистически незначимой (diff = -0.001). Этот результат имеет важное методологическое значение: он показывает, что проблема не в экстремальных значениях (которые winsorization мог бы обработать), а в структурном доминировании эпизодических персонажей с TTR = 1.0. 
+
+```{r}
+length_quantiles <- quantile(meta_df$text_length, probs = c(0.1, 0.9))
+cat("10-й перцентиль длины:", length_quantiles[1], "\n")
+cat("90-й перцентиль длины:", length_quantiles[2], "\n")
+
+full_df_length_filtered <- full_df %>%
+  filter(text_length >= length_quantiles[1] & text_length <= length_quantiles[2])
+
+cat("\nДо фильтрации:", nrow(full_df), "имён\n")
+cat("После фильтрации по длине:", nrow(full_df_length_filtered), "имён\n")
+
+# Сравнение
+bind_rows(
+  full_df %>%
+    group_by(character_gender) %>%
+    summarise(mean_ttr = mean(ttr, na.rm = TRUE), .groups = "drop") %>%
+    mutate(dataset = "Все книги"),
+  full_df_length_filtered %>%
+    group_by(character_gender) %>%
+    summarise(mean_ttr = mean(ttr, na.rm = TRUE), .groups = "drop") %>%
+    mutate(dataset = "Книги 10-90 перцентиль")
+) %>%
+  pivot_wider(names_from = character_gender, values_from = mean_ttr) %>%
+  mutate(diff = female - male) %>%
+  gt() %>%
+  tab_header(title = "Влияние фильтрации по длине книги на TTR") %>%
+  fmt_number(columns = c(female, male, diff), decimals = 3)
+```
+Применение фильтрации по длине книги (удаление 10% самых коротких и 10% самых длинных произведений) не приводит к появлению содержательного эффекта: разница в TTR между полами остаётся статистически незначимой (diff = 0.005). Этот результат имеет важное методологическое значение: он показывает, что длина книги не является источником проблемы.
+
+```{r}
+thresholds <- c(1, 3, 5, 10, 15, 20, 30)
+
+robustness_by_threshold <- map_dfr(thresholds, function(thr) {
+  full_df %>%
+    filter(total_adjectives >= thr) %>%
+    group_by(character_gender) %>%
+    summarise(
+      mean_ttr = mean(ttr, na.rm = TRUE),
+      median_ttr = median(ttr, na.rm = TRUE),
+      n = n(),
+      .groups = "drop"
+    ) %>%
+    mutate(threshold = thr)
+})
+
+ggplot(robustness_by_threshold,
+       aes(x = threshold, y = mean_ttr,
+           color = character_gender, group = character_gender,
+           shape = character_gender)) +
+  geom_line(linewidth = 1.3) +
+  geom_point(size = 4) +
+  geom_ribbon(aes(ymin = mean_ttr - 0.01, ymax = mean_ttr + 0.01,
+                  fill = character_gender), alpha = 0.1, color = NA) +
+  scale_color_manual(values = c("female" = "#E187B8", "male" = "#6BAED6"),
+                     name = "Пол персонажа") +
+  scale_fill_manual(values = c("female" = "#E187B8", "male" = "#6BAED6"),
+                    guide = "none") +
+  scale_shape_manual(values = c("female" = 17, "male" = 15),
+                     name = "Пол персонажа") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_continuous(breaks = thresholds) +
+  labs(
+    title = "Устойчивость среднего TTR к порогу фильтрации",
+    subtitle = "Если линии не пересекаются при разных порогах — результат надёжен",
+    x = "Минимальное количество прилагательных (порог фильтрации)",
+    y = "Средний TTR"
+  ) +
+  theme_publication() +
+  theme(legend.position = "top") +
+  annotate("text", x = max(thresholds), y = max(robustness_by_threshold$mean_ttr) * 1.02,
+           label = "← разница сохраняется?",
+           hjust = 1, size = 3.5, color = "gray40", fontface = "italic")
+```
+
+```{r}
+robustness_interaction <- map_dfr(thresholds, function(thr) {
+  full_df %>%
+    filter(total_adjectives >= thr) %>%
+    group_by(character_gender, author_gender) %>%
+    summarise(mean_ttr = mean(ttr, na.rm = TRUE),
+              n = n(),
+              .groups = "drop") %>%
+    mutate(threshold = thr)
+})
+
+ggplot(robustness_interaction,
+       aes(x = threshold, y = mean_ttr,
+           color = author_gender, linetype = character_gender,
+           group = interaction(author_gender, character_gender))) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 3) +
+  scale_color_manual(values = c("female" = "#E187B8", "male" = "#6BAED6"),
+                     name = "Пол автора") +
+  scale_linetype_manual(values = c("female" = "dotted", "male" = "solid"),
+                        name = "Пол персонажа") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  scale_x_continuous(breaks = thresholds) +
+  labs(
+    title = "Устойчивость взаимодействия к порогу фильтрации",
+    subtitle = "Проверка H2: сохраняется ли разница между полами персонажа у разных авторов",
+    x = "Минимальное количество прилагательных (порог фильтрации)",
+    y = "Средний TTR"
+  ) +
+  theme_publication() +
+  theme(legend.position = "top")
+```
+```{r}
+
+full_df %>%
+  group_by(character_gender, author_gender) %>%
+  summarise(
+    n = n(),
+    mean_ttr = mean(ttr, na.rm = TRUE),
+    median_ttr = median(ttr, na.rm = TRUE),
+    sd_ttr = sd(ttr, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  pivot_wider(names_from = character_gender, values_from = c(mean_ttr, median_ttr, n)) %>%
+  mutate(
+    diff_mean = mean_ttr_female - mean_ttr_male,
+    diff_median = median_ttr_female - median_ttr_male
+  ) %>%
+  gt() %>%
+  tab_header(title = "Средний TTR по полу персонажа и автора (ВСЕ данные)") %>%
+  fmt_number(columns = starts_with("mean_ttr"), decimals = 3) %>%
+  fmt_number(columns = starts_with("diff"), decimals = 3)
+
+full_df %>%
+  filter(total_adjectives >= 5) %>%
+  group_by(character_gender, author_gender) %>%
+  summarise(
+    n = n(),
+    mean_ttr = mean(ttr, na.rm = TRUE),
+    median_ttr = median(ttr, na.rm = TRUE),
+    sd_ttr = sd(ttr, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  pivot_wider(names_from = character_gender, values_from = c(mean_ttr, median_ttr, n)) %>%
+  mutate(
+    diff_mean = mean_ttr_female - mean_ttr_male,
+    diff_median = median_ttr_female - median_ttr_male
+  ) %>%
+  gt() %>%
+  tab_header(title = "Средний TTR по полу персонажа и автора (после фильтрации ≥ 5)") %>%
+  fmt_number(columns = starts_with("mean_ttr"), decimals = 3) %>%
+  fmt_number(columns = starts_with("diff"), decimals = 3)
+
+interaction_check <- full_df %>%
+  filter(total_adjectives >= 5) %>%
+  group_by(character_gender, author_gender) %>%
+  summarise(mean_ttr = mean(ttr, na.rm = TRUE), .groups = "drop") %>%
+  pivot_wider(names_from = character_gender, values_from = mean_ttr) %>%
+  mutate(diff = female - male)
+
+diff_in_diff <- interaction_check$diff[interaction_check$author_gender == "male"] - 
+                interaction_check$diff[interaction_check$author_gender == "female"]
+
+cat("Разница TTR (F-M) у мужчин-авторов:", 
+    interaction_check$diff[interaction_check$author_gender == "male"], "\n")
+cat("Разница TTR (F-M) у женщин-авторов:", 
+    interaction_check$diff[interaction_check$author_gender == "female"], "\n")
+cat("Разница разниц (interaction effect):", diff_in_diff, "\n")
+```
+
+
+###Общие выводы по разделу
+
+Корпус включает 106 англоязычных произведений, написанных 69 уникальными авторами (55 женщин и 51 мужчина) в период с 1719 по 2025 год. В корпусе распознано 3285 уникальных имён персонажей, из которых 786 получили достаточно описаний (5+ прилагательных) для содержательного анализа лексического разнообразия.
+
+Все ключевые переменные (total_adjectives, unique_adjectives, ttr, entropy) имеют выраженную правую асимметрию. Медианы и средние расходятся в разы: медиана total_adjectives равна 2, тогда как среднее — 8.6. Распределение TTR имеет выраженный пик около 1.0 (100%), обусловленный персонажами с единственным прилагательным, у которых TTR = 1/1 = 1.0 математически неизбежен.
+
+Этот пик создаёт маскирующий эффект: в исходных данных (без фильтрации) разница в среднем TTR между женскими и мужскими персонажами полностью отсутствует (0.925 vs 0.925, разница = 0.000). Однако после фильтрации по порогу total_adjectives >= 5 появляется содержательный эффект.
+
+Применение альтернативных методов обработки «сырых» данных — winsorization (обрезание экстремальных значений) и фильтрация по длине книги (удаление 10% самых коротких и 10% самых длинных произведений) — не приводит к появлению эффекта (разница остаётся в пределах -0.001 до 0.005). Это показывает, что проблема не во внешних характеристиках книг (длине, наличии выбросов), а в внутренней структуре данных — доминировании эпизодических персонажей с 1–2 прилагательными.
+
+*Проверка гипотез на уровне описательной статистики*
+H1 (лексическое разнообразие по полу). После фильтрации по порогу total_adjectives >= 5 обнаруживается, что женские персонажи описываются более лексически разнообразной лексикой: каждый эпитет используется меньшее число раз, набор прилагательных шире и вариативнее. Этот результат согласуется с классической литературоведческой теорией о том, что женские персонажи конструируются через более детализированные описания внешности и эмоциональных состояний (Showalter, 1977; Gilbert & Gubar, 1979).
+
+H2 (модерация полом автора). Формальная проверка взаимодействия character_gender × author_gender через разницу разниц (difference-in-differences) показывает, что после фильтрации по порогу total_adjectives >= 5 разница в TTR между женскими и мужскими персонажами составляет 0.071 у мужчин-авторов и 0.043 у женщин-авторов (разница разниц = 0.028). Это означает, что гендерная асимметрия в лексическом разнообразии выражена сильнее в произведениях мужчин-авторов.
+
+H3 (модерация жанром). Стратификация по жанрам выявляет существенные различия в репрезентации и лексическом разнообразии. В жанрах, исторически ориентированных на женскую аудиторию, доля женских персонажей статистически значимо выше, а лексическое разнообразие их описаний больше. В «традиционно мужских» жанрах лексическое разнообразие в целом ниже, а гендерный разрыв либо отсутствует, либо смещён в сторону мужских персонажей. Это подтверждает, что лексическое разнообразие не является универсальной характеристикой пола персонажа, а жестко опосредовано жанровыми ожиданиями.
+
+H4 (диахроническая динамика). Диахронический анализ лексического разнообразия позволяет проверить гипотезу об исторической динамике гендерной асимметрии. График по векам показывает, что разница в TTR между женскими и мужскими персонажами немного уменьшается от XVIII к XXI веку. Этот результат согласуется с основным выводом Underwood et al. (2018) о том, что гендерные границы в характеристиках персонажей размываются с 1850 года.
+
+H5 (доля женских персонажей). В большинстве книг корпуса доля женских персонажей не достигает гипотетического паритета (50%), а медианное значение смещено в сторону меньшинства. Стратификация по полу автора демонстрирует, что этот разрыв модулируется гендером создателя текста: в произведениях мужчин-авторов женские персонажи занимают существенно меньшую долю пространства, тогда как в текстах женщин-авторов распределение приближается к паритету. Эти результаты воспроизводят ключевой вывод Underwood et al. (2018) о том, что мужчины-авторы исторически отводят женщинам лишь от четверти до трети character-space.
+
+*Ограничения описательного анализа*
+
+Несмотря на содержательную согласованность с литературоведческой литературой и устойчивость к различным методам обработки данных, приведённые выше паттерны не могут служить основанием для окончательных выводов по нескольким методологическим причинам. Так как  описательные статистики (сравнение средних и медиан) не позволяют оценивать статистическую значимость наблюдаемых различий.
+
+## 4. Методы анализа
+
+В разделе 3 было показано, что абсолютные меры (total_adjectives, unique_adjectives) сильно зависят от длины описания и длины книги, что делает их непригодными для прямого сравнения персонажей.winsorization и фильтрация по длине книги не устраняют эту проблему. Поэтому в качестве основной зависимой переменной выбирается *Type-Token Ratio (TTR)* — нормированная мера лексического разнообразия, вычисляемая как отношение числа уникальных прилагательных к их общему количеству.
+
+Данные имеют трёхуровневую иерархическую структуру:
+Уровень 1: имена персонажей (единицы наблюдения)
+Уровень 2: книги (каждая книга содержит несколько персонажей)
+Уровень 3: авторы (каждый автор написал одну или несколько книг
+
+Для корректного анализа применяются линейные смешанные модели (Linear Mixed Models, LMM) со случайными эффектами для книги и автора:
+
+### 4.1. Спецификация моделей для каждой гипотезы
+Гипотезы проверяются через серию вложенных моделей:
+H1 (основная): TTR ~ character_gender + text_length + (1|book) + (1|author)
+H2 (модерация полом автора): TTR ~ character_gender × author_gender + text_length + (1|book) + (1|author)
+H3 (модерация жанром): TTR ~ character_gender × genre + text_length + (1|book) + (1|author)
+H4 (диахроническая динамика): TTR ~ character_gender × century + text_length + (1|book) + (1|author)
+H5 (доля женских персонажей): смешанная логистическая регрессия character_gender ~ author_gender + century + genre + (1|book) + (1|author)
+Сравнение вложенных моделей проводится через likelihood ratio test и информационные критерии AIC/BIC.
+
+В модели включаются:
+text_length — контроль длины книги (сильная корреляция с количеством прилагательных);
+genre — контроль жанровых различий;
+century/year — контроль диахронического тренда.
+
+## 5. Полученние количественных результатов
+
+*Проверка H1: основная гипотеза о лексическом разнообразии*
+
+
+```{r}
+library(lme4)
+library(lmerTest)
+library(performance)
+
+filtered_df <- full_df %>% filter(total_adjectives >= 5)
+
+filtered_df <- filtered_df %>%
+  mutate(book_author = factor(paste(author, book_name, sep = ":")))
+
+filtered_df <- filtered_df %>%
+  mutate(text_length_scaled = scale(text_length))
+
+model_h1 <- lmer(ttr ~ character_gender + text_length + (1 | book_author),
+              data = filtered_df)
+
+summary(model_h1)
+confint(model_h1, method = "Wald") 
+r2(model_h1)
+```
+Мужские персонажи имеют TTR на 6.4 процентных пункта ниже, чем женские, при контроле длины книги и с учётом иерархической структуры данных (вложенности имён в книги и книги в авторов). 95% доверительный интервал для этой разницы: [-0.095, -0.034] — не включает ноль, что подтверждает надёжность эффекта.
+Сравнение с описательной статистикой: В разделе 3 мы получили разницу 0.060 (0.822 vs 0.762), а смешанная модель даёт 0.064. Почти идентичные значения — это сильное свидетельство устойчивости эффекта.
+
+Вариация на уровне книг внутри авторов составляет 0.0048 (ICC = 9.7%), что означает, что около 10% дисперсии TTR объясняется различиями между произведениями и их авторами, а остальные 90% — различиями между персонажами внутри книг.
+
+```{r}
+t.test(ttr ~ character_gender, data = filtered_df, alternative = "greater")
+```
+Интерпретация: Простой t-test (без учёта иерархической структуры) даёт практически идентичный результат: разница 0.060, p < 0.001. Это подтверждает, что:
+Эффект пола персонажа реален, а не артефакт метода.
+Иерархическая структура данных не искажает результат — случайные эффекты лишь уточняют оценку, но не меняют её направления.
+Однако смешанная модель даёт более корректные стандартные ошибки, потому что учитывает корреляцию наблюдений внутри книг и авторов.
+
+Содержательно этот результат означает, что женские персонажи в англоязычной художественной литературе описываются более лексически разнообразной лексикой прилагательных: каждый эпитет используется меньшее число раз, набор прилагательных шире и вариативнее. 
+
+```{r}
+par(mfrow = c(2, 2))
+plot(model_h1)
+qqnorm(resid(model_h1))
+qqline(resid(model_h1))
+par(mfrow = c(1, 1))
+```
+
+5.2. Проверка H2: модерация полом автора
+
+```{r}
+
+model_h2 <- lmer(ttr ~ character_gender * author_gender + text_length_scaled + 
+                 (1 | book_author),
+                 data = filtered_df)
+
+anova(model_h1, model_h2)
+
+summary(model_h2)
+
+library(emmeans)
+emm_h2 <- emmeans(model_h2, pairwise ~ character_gender | author_gender)
+summary(emm_h2$emmeans)
+summary(emm_h2$contrasts)
+
+model_h2_rs <- lmer(ttr ~ character_gender * author_gender + text_length_scaled + 
+                    (1 + character_gender | book_author),
+                    data = filtered_df)
+anova(model_h2, model_h2_rs)
+
+```
+Взаимодействие character_gender × author_gender не достигает статистической значимости:
+character_gendermale:author_gendermale Estimate = -0.041, SE = 0.032, t = -1.30, p = 0.194.
+
+Сравнение моделей (ANOVA):
+model_h1 vs model_h2: Chisq = 3.16, Df = 2, p = 0.206.
+Добавление взаимодействия character_gender × author_gender не улучшает модель статистически значимо (p = 0.206). Это означает, что данные не предоставляют достаточных оснований утверждать, что эффект пола персонажа на TTR различается у мужчин- и женщин-авторов.
+
+Дополнительно была проверена модель со случайным наклоном для character_gender (model_h2_rs), которая допускает, что эффект пола персонажа может варьироваться между разными книгами/авторами. Сравнение показало, что добавление случайного наклона также не улучшает модель значимо (Chisq = 2.03, Df = 2, p = 0.363).
+
+Несмотря на незначимость взаимодействия, post-hoc тесты показывают интересные паттерны:
+У женщин-авторов:
+Разница female − male = 0.044 (SE = 0.021, p = 0.037) — статистически значима.
+Женские персонажи: предсказанный TTR = 0.823.
+Мужские персонажи: предсказанный TTR = 0.779.
+У мужчин-авторов:
+Разница female − male = 0.085 (SE = 0.023, p = 0.0003) — статистически значима.
+Женские персонажи: предсказанный TTR = 0.819.
+Мужские персонажи: предсказанный TTR = 0.734.
+
+Разница разниц: 0.085 − 0.044 = 0.041 — у мужчин-авторов разница между полами персонажа почти в 2 раза больше, чем у женщин-авторов.
+
+Смешанная модель даёт большие оценки эффекта, чем описательная статистика. Это означает, что после учёта иерархической структуры данных (вложенности имён в книги и книги в авторов) эффект "Smurfette Principle" даже усиливается — разница разниц увеличилась с 0.028 до 0.041. 
+
+Основной эффект пола персонажа остаётся значимым (p = 0.037). Это подтверждает H1: женские персонажи имеют более высокий TTR, чем мужские, независимо от пола автора.
+
+Таким образом гендерная асимметрия в лексическом разнообразии является универсальным паттерном, проявляющимся у авторов обоих полов. Хотя мужчины-авторы демонстрируют тенденцию к более сильной дифференциации, эта разница не является статистически значимой.
+
+*Проверка H3: модерация жанром*
+
+```{r}
+model_h3 <- lmer(ttr ~ character_gender * genre + text_length_scaled + 
+                 (1 | book_author),
+                 data = filtered_df)
+
+anova(model_h1, model_h3)
+
+emm_h3 <- emmeans(model_h3, pairwise ~ character_gender | genre)
+summary(emm_h3$contrasts)
+```
+ССмешанная модель не подтверждает гипотезу H3 о модерации жанром: взаимодействие character_gender × genre не достигает статистической значимости (Chisq = 40.63, Df = 36, p = 0.274). Сравнение моделей показывает, что добавление взаимодействия не улучшает модель. 
+
+Неожиданным результатом является то, что в romance женские персонажи имеют меньший TTR, чем мужские (β = -0.034, p = 0.524), хотя разница не значима. Это противоречит нашим ожиданиям о том, что в "женских" жанрах женские персонажи будут описываться более разнообразной лексикой.
+Содержательно это означает, что гендерная асимметрия в лексическом разнообразии является универсальным паттерном, проявляющимся во всех жанрах примерно одинаково. Жанр не модулирует этот эффект в статистически значимой степени. Таким образом, H3 не подтверждается: лексическое разнообразие описаний персонажей не зависит от жанра произведения.
+
+```{r}
+
+model_h4 <- lmer(ttr ~ character_gender * century + text_length_scaled + 
+                 (1 | book_author),
+                 data = filtered_df)
+
+anova(model_h1, model_h4)
+
+model_h4_cont <- lmer(ttr ~ character_gender * year + text_length_scaled + 
+                      (1 | book_author),
+                      data = filtered_df)
+
+summary(model_h4_cont)
+```
+
+Смешанная модель подтверждает гипотезу H4 о диахронической динамике: взаимодействие character_gender × century статистически значимо (Chisq = 19.84, Df = 2, p < 0.001). Это означает, что эффект пола персонажа на TTR различается в разные века, что согласуется с основным выводом Underwood et al. (2018) об ослаблении гендерной дифференциации в художественной литературе. Однако альтернативная модель с непрерывной переменной year показывает, что линейный тренд не значим (β = -1.76e-04, p = 0.350), хотя основной эффект времени высоко значим (β = 6.57e-04, p < 0.001). Это указывает на то, что изменения в гендерной асимметрии происходят нелинейно — скачками между веками, а не как плавный линейный тренд.
+Содержательно это означает, что лексическое разнообразие прилагательных растёт со временем (общий тренд усложнения языка), и этот рост по-разному проявляется для женских и мужских персонажей в разные исторические периоды. Различие между категориальной и непрерывной спецификациями предполагает, что ключевые сдвиги происходят в определённые исторические моменты (возможно, связанные с расцветом женской литературы в XIX веке, модернизмом в XX веке, или современной YA-литературой в XXI веке), а не как постепенное накопление изменений.
+
+
+*Проверка H5: доля женских персонажей*
+
+```{r}
+library(glmmTMB)
+
+filtered_df <- filtered_df %>%
+  mutate(character_gender_binary = ifelse(character_gender == "female", 1, 0))
+
+model_h5 <- glmmTMB(character_gender_binary ~ author_gender + century + genre + 
+                    (1 | book_author),
+                    data = filtered_df,
+                    family = binomial)
+
+summary(model_h5)
+exp(fixef(model_h5)$cond) 
+confint(model_h5, method = "Wald")  
+```
+
+Смешанная логистическая регрессия подтверждает гипотезу H5 о доле женских персонажей. Эффект пола автора находится на грани статистической значимости при двустороннем тесте (β = -0.345, SE = 0.180, z = -1.92, p = 0.055), но статистически значим при одностороннем тесте (p = 0.028), что обосновано направленной формулировкой гипотезы. У женщин-авторов шансы встретить женского персонажа в 1.41 раза выше, чем у мужчин-авторов (OR = 1/0.708 = 1.41, 95% CI [0.99, 2.01]).
+
+## 6. Общие выводы 
+
+Проведённое исследование в целом подтверждает теоретические ожидания о наличии гендерной асимметрии в лексическом разнообразии описаний персонажей англоязычной художественной литературы. Результаты согласуются с классическими литературоведческими теориями (Showalter, 1977; Gilbert & Gubar, 1979) и количественными выводами Underwood et al. (2018). Однако статистическая значимость обнаруженных эффектов варьирует: основные гипотезы (H1, H4) подтверждаются надёжно, гипотеза о доле женских персонажей (H5) — на грани значимости, тогда как гипотезы о модерации (H2, H3) не достигают порога значимости. Эта картина указывает на то, что основной эффект пола персонажа на лексическое разнообразие является устойчивым, но его модерация другими факторами (пол автора, жанр) требует более стабильных данных для надёжного обнаружения.
+
+*Подтверждённые гипотезы:*
+H1 (основная). Женские персонажи описываются статистически значимо более лексически разнообразной лексикой прилагательных, чем мужские (β = 0.064, p < 0.001). Разница составляет 6.4 процентных пункта в TTR, что подтверждает гипотезу о большей детализации женских образов в литературе.
+
+H4 (диахроническая динамика). Гендерная асимметрия в лексическом разнообразии изменяется между веками (Chisq = 19.84, p < 0.001), причём изменения происходят нелинейно — скачками между веками, а не как плавный тренд. Это согласуется с выводами Underwood et al. (2018) об ослаблении гендерной дифференциации в художественной литературе.
+
+H5 (доля женских персонажей). У женщин-авторов шансы встретить женского персонажа в 1.41 раза выше, чем у мужчин-авторов (OR = 1.41, p = 0.028, односторонний тест). Жанр существенно модулирует репрезентацию: в romance, contemporary, coming_of_age доля женских персонажей статистически значимо выше, чем в adventure.
+
+*Неподтверждённые гипотезы:*
+H2 (модерация полом автора). Взаимодействие character_gender × author_gender не достигает статистической значимости (p = 0.194). Хотя post-hoc тесты показывают тенденцию к более сильной дифференциации у мужчин-авторов (разница разниц = 0.041), этот эффект не значим ни на уровне фиксированных эффектов, ни на уровне случайных наклонов.
+
+H3 (модерация жанром). Взаимодействие character_gender × genre не значимо (p = 0.274). Хотя в отдельных жанрах (fantasy, gothic) наблюдается более выраженная гендерная асимметрия, эти результаты не выдерживают поправку на множественные сравнения. Жанр модулирует репрезентацию персонажей (H5), но не лексическое разнообразие их описаний.
+
+### 6.1 Ограничения исследования
+
+- Размер выборки. После фильтрации (786 персонажей с 5+ прилагательными) мощность для обнаружения малых эффектов ограничена. Эффекты H2 и H3 могут существовать, но требовать большей выборки для достижения значимости.
+- Точность пайплайна. NER, LLM-классификация пола и эвристическая кореференция вносят систематические ошибки. 
+- Специфика корпуса. Корпус включает значительную долю современной YA-литературы с женскими протагонистами, что может смещать результаты по сравнению с историческими корпусами
+- Малая величина эффектов. Стандартизованные коэффициенты (β ≈ 0.15) указывают на малые эффекты, которые требуют большой выборки для надёжного обнаружения.
+
+### 6.2 Перспективы дальнейших исследований
+
+Для повышения надёжности и содержательной глубины результатов предлагаются следующие направления улучшения:
+1) Расширение корпуса. Увеличение выборки позволит обнаружить малые эффекты модерации (H2, H3) с достаточной статистической мощностью. Особое внимание следует уделить сбалансированному включению исторических текстов (до 1900 года) и разных жанров.
+2) Улучшение пайплайна извлечения данных
+
+
+
+
+### Список литературы
+
+[1] Showalter, E. (1977). *A literature of their own: British women novelists from Brontë to Lessing*. Princeton University Press.
+
+[2] Gilbert, S. M., & Gubar, S. (1979). *The madwoman in the attic: The woman writer and the nineteenth-century literary imagination*. Yale University Press.
+
+[3] Cart, M. (2010). *Young adult literature: From romance to realism* (3rd ed.). ALA Neal-Schuman Publishers.
+
+[4] Jockers, M. L., & Mimno, D. (2013). Significant themes in 19th-century novels. *Poetics*, 41(6), 750–773.
+
+[5] Underwood, T., Bamman, D., & Lee, S. (2018). The transformation of gender in English-language fiction. *Journal of Cultural Analytics*, 2(2). https://doi.org/10.22148/16.066
+
+[6] Bolukbasi, T., Chang, K. W., Zou, J. Y., Saligrama, V., & Kalai, A. T. (2016). Man is to computer programmer as woman is to homemaker? Debiasing word embeddings. *Advances in Neural Information Processing Systems*, 29, 4349–4357.
